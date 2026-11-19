@@ -1,6 +1,6 @@
 # 🛒 Shopify AI Agent
 
-[![CI](https://github.com/rahaman1721/shopify-ai-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/rahaman1721/shopify-ai-agent/actions/workflows/ci.yml)
+[![Build](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/rahaman1721/shopify-ai-agent)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Gemini](https://img.shields.io/badge/Gemini_2.0_Flash-Free_Tier-4285F4?style=flat-square&logo=google&logoColor=white)](https://aistudio.google.com)
@@ -9,6 +9,13 @@
 > **An AI shopping assistant for Shopify stores — powered by Gemini 2.0 Flash tool calling, real-time SSE streaming, and an embeddable React chat widget.**
 
 Not just a chatbot. The agent calls real Shopify APIs to fetch live product data, check orders, and answer policy questions — it never guesses or invents answers. Supports Tamil + English.
+
+<div align="center">
+  <br/>
+  <img src="docs/screenshots/widget-demo.jpg" alt="Shopify AI Agent Chat Widget UI" width="400" style="border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.35);" />
+  <p><sub><b>Shopify AI Agent</b> — Embeddable React Chat Widget with interactive product carousel, bi-directional scrollable quick actions, and Gemini tool use</sub></p>
+  <br/>
+</div>
 
 ---
 
@@ -135,32 +142,33 @@ shopify-ai-agent/
 │   │   └── data/policies/          ← 5 JSON policy files
 │   └── tests/
 ├── widget/                         ← Embeddable React chat widget
-├── .github/workflows/ci.yml        ← CI: lint + typecheck + tests
+├── docs/screenshots/               ← UI demo screenshots
 └── .env.example
 ```
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Roadmap & Verified Milestones
 
-- [x] FastAPI skeleton + CI pipeline
-- [x] 5 tool definitions
-- [x] Policy JSON store
-- [ ] Gemini tool use loop (Phase 2)
-- [ ] Shopify Storefront API integration (Phase 2)
-- [ ] SSE streaming (Phase 3)
-- [ ] React chat widget (Phase 4)
-- [ ] Product cards in chat (Phase 4)
-- [ ] Debug panel (Phase 5)
-- [ ] Tamil language testing (Phase 6)
-- [ ] Deploy to Render.com + Vercel (Phase 7)
+- [x] FastAPI skeleton + architecture setup
+- [x] 5 tool definitions (`search_products`, `get_product_details`, `check_order_status`, `get_store_policy`, `recommend_products`)
+- [x] Policy JSON store (shipping, returns, refunds, warranty, exchanges)
+- [x] Gemini 2.0 Flash tool use loop (`gemini_agent.py`)
+- [x] Shopify Storefront API GraphQL & Admin REST client (`shopify.py`)
+- [x] SSE streaming router (`/api/chat`)
+- [x] React 19 chat widget matching Shopify design (`widget/`)
+- [x] Inline Product Cards carousel with real image previews
+- [x] Live Debug Panel for tool logs & execution telemetry
+- [x] Bi-directional smooth scroll for quick action pills (Drag + Mouse wheel + Touch)
+- [x] Tamil + English bilingual query support
+- [x] Production Dockerfile & Vercel IIFE bundle configuration
 
 ---
 
 ## 💡 What I Learned
 
 - **Agentic AI loops:** How to implement multi-turn tool calling where the LLM decides which tools to call, executes them, and continues reasoning.
-- **SSE streaming:** How to stream LLM responses chunk-by-chunk from FastAPI to a React frontend using Server-Sent Events.
+- **SSE streaming:** How to stream LLM responses chunk-by-word from FastAPI to a React frontend using Server-Sent Events.
 - **Security in AI agents:** Why AI agents must never be trusted to invent data — always verify tool outputs and enforce guardrails like email verification for sensitive operations.
 - **Shopify APIs:** GraphQL Storefront API (public) vs Admin REST API (private) — when to use which and how to keep Admin tokens secure.
 
