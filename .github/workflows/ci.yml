@@ -1,0 +1,68 @@
+name: CI — Lint, Type Check, Tests
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  backend-ci:
+    name: Backend (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -e ".[dev]"
+
+      - name: Ruff lint
+        run: ruff check .
+
+      - name: mypy type check
+        run: mypy app/ --ignore-missing-imports
+
+      - name: Pytest
+        env:
+          GEMINI_API_KEY: "dummy-key-for-tests"
+          SHOPIFY_STORE_DOMAIN: "test.myshopify.com"
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: "dummy-token"
+          SHOPIFY_ADMIN_API_KEY: "dummy-admin-key"
+        run: pytest tests/ -v --tb=short
+
+  frontend-ci:
+    name: Frontend (TypeScript)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: widget
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: widget/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npm run typecheck
+
+      - name: Build widget
+        run: npm run build
